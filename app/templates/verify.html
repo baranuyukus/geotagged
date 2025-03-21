@@ -79,7 +79,7 @@
                     <p class="text-sm text-gray-600">Görselinize coğrafi etiket eklemek iyi bir başlangıç, ancak botmarketi.com.tr'nin sunduğu Google Maps Pinleme yazılımı size çok daha fazlasını sunabilir!</p>
                 </div>
                 
-                <a href="{{ url_for('download_file', filename=filename) }}" id="downloadBtn" class="btn btn-primary btn-lg disabled">
+                <a href="#" id="downloadBtn" class="btn btn-primary btn-lg disabled" onclick="return false;">
                     <i class="fas fa-download"></i> Görseli İndir
                 </a>
                 <p id="downloadHint" class="text-sm text-gray-500 mt-2">
@@ -101,6 +101,7 @@
         const countdownContainer = document.getElementById('countdownContainer');
         const downloadHint = document.getElementById('downloadHint');
         const downloadTimer = document.getElementById('downloadTimer');
+        const downloadUrl = "{{ url_for('download_file', filename=filename) }}";
         
         // Sayfa açıldığında sayaç başlat
         const interval = setInterval(function() {
@@ -113,6 +114,8 @@
                 clearInterval(interval);
                 downloadBtn.classList.remove('disabled');
                 downloadBtn.classList.add('hover:shadow-lg', 'transition-all');
+                downloadBtn.href = downloadUrl;
+                downloadBtn.onclick = null; // onclick kısıtlamasını kaldır
                 countdown.textContent = "0";
                 timer.textContent = "0";
                 

@@ -182,9 +182,13 @@ def write_exif():
                     # DocumentName için UTF-8
                     exif_dict["0th"][piexif.ImageIFD.DocumentName] = keywords.encode('utf-8')
                     
-                    # Windows XPKeywords için UTF-16
+                    # Windows XPKeywords için UTF-16 (little endian)
                     if hasattr(piexif.ImageIFD, 'XPKeywords'):
-                        exif_dict["0th"][piexif.ImageIFD.XPKeywords] = keywords.encode('utf-16')
+                        # UTF-16LE ile kodla ve null byte ekle
+                        utf16_data = keywords.encode('utf-16le')
+                        if not utf16_data.endswith(b'\x00\x00'):  # Eğer null byte yoksa ekle
+                            utf16_data += b'\x00\x00'
+                        exif_dict["0th"][piexif.ImageIFD.XPKeywords] = utf16_data
                 except Exception as e:
                     print(f"Anahtar kelimeler eklenirken hata: {e}")
             
@@ -268,11 +272,43 @@ def verify(filename):
         flash('Dosya bulunamadı')
         return redirect(url_for('index'))
     
+    # Dosya oluşturulma zamanını kontrol et
+    try:
+        file_creation_time = os.path.getctime(file_path)
+        current_time = time.time()
+        
+        # Eğer dosya 5 saniyeden daha eskiyse, muhtemelen eski bir dosya
+        if current_time - file_creation_time > 5:
+            flash('Bu oturum zaman aşımına uğradı. Lütfen işlemi tekrar yapın.')
+            return redirect(url_for('index'))
+    except Exception as e:
+        print(f"Dosya zaman kontrolü hatası: {e}")
+    
     return render_template('verify.html', filename=filename)
 
 @app.route('/download/<filename>')
 def download_file(filename):
-    return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
+    file_path = os.path.join(app.config['DOWNLOAD_FOLDER'], filename)
+    
+    # Dosyanın varlığını ve yaşını kontrol et
+    if os.path.exists(file_path):
+        file_creation_time = os.path.getctime(file_path)
+        current_time = time.time()
+        
+        # Dosya en az 10 saniye önce oluşturulmuş olmalı
+        if current_time - file_creation_time < 10:
+            flash('Lütfen dosyayı indirmek için 10 saniye bekleyin.')
+            return redirect(url_for('verify', filename=filename))
+            
+        # Eğer dosya 1 saatten daha eskiyse
+        if current_time - file_creation_time > 3600:
+            flash('Bu dosyanın süresi dolmuş. Lütfen işlemi tekrar yapın.')
+            return redirect(url_for('index'))
+            
+        return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)
+    else:
+        flash('Dosya bulunamadı')
+        return redirect(url_for('index'))
 
 @app.route('/faq')
 def faq():
