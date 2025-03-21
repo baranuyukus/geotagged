@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}Sıkça Sorulan Sorular - GeoTagApp{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-question-circle"></i> Sıkça Sorulan Sorular</h1>
+        </div>
+        <div class="card-body">
+            <div class="space-y-4" id="faqAccordion">
+                <!-- Yeni Soru - Google Maps Sıralaması -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseMaps">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Coğrafi etiketli görüntüler Google Maps sıralamama nasıl yardımcı olur?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseMaps" class="px-6 py-4 bg-white">
+                        <p class="mb-4 text-gray-700">Coğrafi etiketli görüntüler, Google Maps ve Google Arama'da işletmenizin görünürlüğünü ve sıralamasını iyileştirmenin etkili bir yoludur. İşte nasıl yardımcı olabilecekleri:</p>
+                        
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700 mb-4">
+                            <li><strong>Geliştirilmiş yerel SEO:</strong> Coğrafi etiketli görüntüler, Google'ın işletmenizin gerçek konumunu doğrulamasına yardımcı olur, bu da yerel aramalarda daha iyi sıralamalara katkıda bulunabilir.</li>
+                            <li><strong>Daha yüksek güvenilirlik:</strong> Konumunuzda çekilmiş görüntüler, Google'ın işletmenizin gerçekliğini değerlendirmesine yardımcı olabilir, bu da İşletme Profilinizin daha görünür olmasını sağlar.</li>
+                            <li><strong>Kullanıcı deneyimi:</strong> Coğrafi etiketli görüntüler, kullanıcıların işletmenizin gerçek konumunu görselleştirmesine yardımcı olur, bu da daha yüksek etkileşim oranlarına yol açabilir.</li>
+                        </ol>
+                        
+                        <div class="alert alert-warning">
+                            <p class="mb-0"><strong>ÖNEMLİ:</strong> Daha profesyonel ve kapsamlı bir Google Maps sıralama stratejisi için <a href="https://botmarketi.com.tr" target="_blank" class="text-primary hover:underline">botmarketi.com.tr</a>'nin Google Maps Pinleme Yazılımını kullanmayı düşünün. Bu araç, manuel coğrafi etiketlemeden çok daha fazlasını sunarak işletmenizin Google Maps'te sıralamasını optimize eder.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Soru 1 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseOne">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Görsellerin coğrafi etiketlenmesi (geotagging) nedir?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseOne" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">Görsellerin coğrafi etiketlenmesi, bir görsel dosyasına coğrafi bilgilerin (enlem, boylam veya diğer konum ile ilgili meta verilerin) eklenmesi işlemidir. Bu bilgiler genellikle görselin EXIF (Exchangeable Image File Format) meta verilerinde saklanır ve görselin nerede çekildiği veya görselde ne gösterildiği hakkında bağlam sağlamaya yardımcı olur.</p>
+                        <p class="mb-3 text-gray-700">Bu coğrafi bilgiler, görselin nerede çekildiği hakkında bağlam sağlar ve aşağıdaki şekillerde faydalı olabilir:</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>Görselleri düzenleme ve sıralama: Coğrafi etiketlenmiş görseller, konuma göre kolayca sıralanabilir, filtrelenebilir ve düzenlenebilir; bu da kullanıcıların belirli görselleri daha kolay bulmalarına veya konuma dayalı albümler veya galeriler oluşturmalarına olanak tanır.</li>
+                            <li>Coğrafi etiketleme, arama motorlarına konum tabanlı bağlam sağlayarak görsel arama sonuçlarını ve SEO'yu iyileştirebilir. Bu, görsellerinizin yerel aramalarda görünmesine ve web sitenizin genel SEO'suna katkıda bulunmasına yardımcı olabilir.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Soru 2 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseTwo">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Google görsellerdeki coğrafi etiketleri nasıl kullanır?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseTwo" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">GBP - Google İş Profili (eskiden GMB - Google My Business olarak bilinirdi) gibi platformlara bir görsel yüklediğinizde veya web sitenizde bir görsel yayınladığınızda, Google muhtemelen orijinal görseli, coğrafi etiketleri ve diğer meta verileri (EXIF/IPTC verileri gibi) veritabanlarında saklar. Ancak, platformlarında görüntülenen görseller, web için optimize edilirler; boyutu küçültülür ve meta verileri kaldırılır. Bu, sayfanın yükleme hızını artırmak ve gizlilik nedenleriyle yapılır.</p>
+                        <p class="mb-3 text-gray-700">Bu kaldırma işlemine rağmen, Google'ın orijinal meta verilere, coğrafi etiketler dahil olmak üzere, muhtemelen erişiminin olduğunu unutmamak önemlidir. Profil, görsel veya web sitelerinin sıralamasını belirlemek için bu ek bilgileri kullanabilirler. Bu meta verilerin sıralamayı ne ölçüde etkilediği, Google'ın arama algoritmasının gizli bir parçasıdır.</p>
+                        <p class="text-gray-700">Google, Google Arama Merkezi: Görsel Meta Veri En İyi Uygulamaları sayfasında ayrıntılı olarak belirtildiği gibi görsellerin meta verilerle zenginleştirilmesini teşvik eder.</p>
+                    </div>
+                </div>
+                
+                <!-- Soru 3 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseThree">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Coğrafi etiketleme için hangi dosya formatı önerilir?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseThree" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">Coğrafi etiketleme için JPG formatı önerilir, çünkü EXIF meta verilerinde coğrafi etiketleri saklamak için standart bir yönteme sahiptir. Bu, onu çoğu araç ve platformla yaygın olarak uyumlu hale getirir ve coğrafi etiketlerin kolayca okunup kullanılmasını sağlar.</p>
+                        <p class="mb-3 text-gray-700">PNG ve WebP formatları, EXIF meta verilerinde coğrafi etiketleri saklamak için standart bir yöntem yoktur. Bunun yerine, standart olmayan bir EXIF uzantısı olarak coğrafi etiketleri saklarlar. Sonuç olarak, Windows ve macOS için yerleşik görsel dosyası özellik görüntüleyicileri dahil olmak üzere birçok araç, PNG ve WebP görsellerinden coğrafi etiketleri okuyamaz veya görüntüleyemez.</p>
+                        <p class="text-gray-700">PNG, WebP veya JPG bir görseldeki coğrafi etiketleri kontrol etmek için GeoTagApp gibi bir araç kullanın. Görseli araca yükleyin ve coğrafi etiketler mevcutsa, enlem ve boylam alanları doldurulacaktır. Haritada bir işaretçi de coğrafi etiketlenmiş konumu gösterecektir. Bu yöntem hızlı, uygun ve çeşitli görsel formatlarıyla uyumludur, bu nedenle yerleşik görsel dosyası özellik görüntüleyicilerine bağlı kalmanıza gerek yoktur.</p>
+                    </div>
+                </div>
+                
+                <!-- Soru 4 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseFour">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Anahtar kelimeler ve açıklamalar EXIF verilerine nasıl kaydedilir?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseFour" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">Anahtar kelimeler ve açıklamalar, ek bağlam sağlamak ve aranabilirliği iyileştirmek için görsel dosyalarının EXIF başlığına kaydedilebilir.</p>
+                        <p class="mb-3 text-gray-700">Anahtar kelimeler için, bunlar virgülle ayrılmalı ve bir kişinin görseli bulmak için bir arama motoruna girebileceği ilgili kelimeler veya etiketler içermelidir. Doğru ve açıklayıcı anahtar kelimeler seçmek, görselinizin arama sonuçlarındaki görünürlüğünü artırmaya yardımcı olabilir. Anahtar kelimeler için maksimum uzunluk 6.600 karakterdir.</p>
+                        <p class="text-gray-700">EXIF başlığındaki açıklama alanı, bir HTML alt etiketinde kullanılan içeriğe benzer şekilde, görselin içeriğinin net ve özlü bir açıklamasını içermelidir. Bu açıklama, görselde görünür olanı doğru bir şekilde temsil etmeli ve görseli göremeyen kullanıcılar ve içeriği dizine ekleyen arama motorları için bağlam sağlamalıdır. Açıklama için maksimum uzunluk 1.300 karakterdir.</p>
+                        <p class="text-gray-700">Görsel dosyalarınızın EXIF meta verilerine iyi biçimlendirilmiş anahtar kelimeler ve açıklamalar ekleyerek, görsellerinizin aranabilirliğini ve erişilebilirliğini artırabilir, potansiyel olarak arama sonuçlarındaki performansını ve genel kullanıcı deneyimini iyileştirebilirsiniz.</p>
+                    </div>
+                </div>
+                
+                <!-- Soru 7 - Yeni Eklenen -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseSeven">
+                        <h2 class="text-base font-medium text-gray-800">
+                            GeoTagApp'in kaydettiği EXIF verileri diğer araçlarla görüntülenebilir mi?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseSeven" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">Evet, GeoTagApp'in kaydettiği EXIF verileri diğer araçlar tarafından görüntülenebilir, ancak farklı araçlar farklı EXIF alanlarını görüntüleyebilir.</p>
+                        
+                        <h5 class="h6 mt-3 text-gray-700">Anahtar Kelimeler (Keywords)</h5>
+                        <p class="text-gray-700">GeoTagApp, anahtar kelimeleri birden fazla EXIF alanına kaydeder:</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li><strong>DocumentName:</strong> Çoğu EXIF okuyucu bu alanı görüntüleyebilir (örneğin Apple Preview ve iPhone gibi).</li>
+                            <li><strong>XPKeywords:</strong> Özellikle Windows sistemlerinde daha yaygın olarak kullanılır.</li>
+                            <li><strong>UserComment:</strong> Bazı EXIF okuyucular tarafından desteklenir.</li>
+                        </ul>
+                        <p class="text-gray-700">Bu yaklaşım, anahtar kelimelerinizin farklı araçlar tarafından okunabilme olasılığını artırır. Farklı araçlarla baktığınızda anahtar kelimelerinizin farklı alanlarda gösterilebileceğini unutmayın.</p>
+                        
+                        <h5 class="h6 mt-3 text-gray-700">Görsel Kalitesi</h5>
+                        <p class="text-gray-700">GeoTagApp, görsellerinizin orijinal boyutlarını korur ve yüksek kalitede kaydeder:</p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700">
+                            <li>JPG görselleri için %95 kalite seviyesi kullanılır (çok yüksek kalite).</li>
+                            <li>PNG ve WebP gibi diğer formatlar için orijinal kalite korunur.</li>
+                            <li>Orijinal görselin piksel boyutları korunur ve EXIF'e kaydedilir.</li>
+                        </ul>
+                        <p class="text-gray-700">Eğer görsellerinizin kalitesinde bir düşüş fark ederseniz, lütfen bunu <a href="mailto:info@botmarketi.com.tr" class="text-primary hover:underline">info@botmarketi.com.tr</a> adresinden bildirin.</p>
+                    </div>
+                </div>
+                
+                <!-- Soru 5 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseFive">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Aboneliğimi nasıl iptal edebilirim?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseFive" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">Aboneliklerinizi Gumroad.com üzerinden yönetiyoruz. Aboneliğinizi iptal etmek için şunları yapmanız yeterlidir:</p>
+                        <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                            <li>E-postanızı kontrol edin: "Gumroad" dan gelen herhangi bir e-postayı bulun.</li>
+                            <li>Bağlantıya tıklayın: "Üyeliği Yönet," "Abonelik Ayarları" veya "Aboneliği İptal Et" ifadesini arayın.</li>
+                            <li>Adımları izleyin: Bağlantıya tıklayın ve aboneliği iptal etmek için talimatları izleyin.</li>
+                        </ol>
+                        <p class="text-gray-700">Herhangi bir yardıma ihtiyacınız olursa, <a href="mailto:info@botmarketi.com.tr" class="text-primary hover:underline">info@botmarketi.com.tr</a> adresinden bizimle iletişime geçmekten çekinmeyin!</p>
+                    </div>
+                </div>
+                
+                <!-- Soru 6 -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseSix">
+                        <h2 class="text-base font-medium text-gray-800">
+                            Yüklenen görseller ne kadar süreyle saklanır?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseSix" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">Yüklenen görseller düzenli aralıklarla silinecek ve başka hiçbir şekilde kullanılmayacaktır. Gizliliğinizi korumak ve sunucu alanından tasarruf etmek için, görselleriniz işlem tamamlandıktan sonra 24 saat içinde otomatik olarak silinir.</p>
+                        <p class="text-gray-700">İşleminizi tamamladıktan sonra, lütfen coğrafi etiketlenmiş görselinizi indirmeyi unutmayın, çünkü yakında sunucularımızdan silinecektir.</p>
+                    </div>
+                </div>
+                
+                <!-- BoTMaRkEtİ.CoM.Tr Hakkında Yeni Soru -->
+                <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center cursor-pointer faq-toggle"
+                         data-target="collapseBot">
+                        <h2 class="text-base font-medium text-gray-800">
+                            botmarketi.com.tr'deki Google Maps Pinleme yazılımı nedir?
+                        </h2>
+                        <i class="fas fa-chevron-down text-gray-500 transform transition-transform duration-200"></i>
+                    </div>
+                    <div id="collapseBot" class="hidden px-6 py-4 bg-white">
+                        <p class="mb-3 text-gray-700">botmarketi.com.tr'deki Google Maps Pinleme yazılımı, işletmenizin Google Maps üzerindeki görünürlüğünü ve sıralamasını optimize etmek için kullanılan profesyonel bir araçtır. GeoTagApp'in temel geotag ekleme işlevinin çok ötesinde, bu yazılım şunları sağlar:</p>
+                        
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 mb-4">
+                            <li><strong>Otomatik konum işaretleme:</strong> İşletmenizin konumunu çeşitli Google platformlarında otomatik olarak işaretler</li>
+                            <li><strong>Sıralama optimizasyonu:</strong> Google'ın algoritmasına göre optimize edilmiş sonuçlar için akıllı konum stratejileri kullanır</li>
+                            <li><strong>Analitik ve raporlama:</strong> İşletmenizin sıralama performansını gerçek zamanlı olarak izler</li>
+                            <li><strong>Çoklu konumlar:</strong> Birden fazla şube veya işletme konumunuz varsa hepsini tek bir panelden yönetebilirsiniz</li>
+                        </ul>
+                        
+                        <div class="alert alert-info mb-3">
+                            <p class="mb-0"><i class="fas fa-info-circle me-2"></i>GeoTagApp, yalnızca görsellerinize coğrafi etiket ekleme imkanı sunarken, botmarketi.com.tr'nin Google Maps Pinleme yazılımı işletmeniz için tam kapsamlı bir konum pazarlama çözümü sunar.</p>
+                        </div>
+                        
+                        <a href="https://botmarketi.com.tr" target="_blank" class="btn btn-warning mt-2">
+                            <i class="fas fa-external-link-alt me-2"></i>Detaylı Bilgi İçin botmarketi.com.tr'yi Ziyaret Edin
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // İlk soruyu varsayılan olarak aç
+        const firstQuestion = document.querySelector('.faq-toggle');
+        toggleFaq(firstQuestion);
+        
+        // Tüm FAQ toggle butonlarını seç
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        
+        // Her bir butona tıklama olayı ekle
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                toggleFaq(this);
+            });
+        });
+        
+        // FAQ toggle fonksiyonu
+        function toggleFaq(element) {
+            // Hedef içerik elementini al
+            const targetId = element.getAttribute('data-target');
+            const targetContent = document.getElementById(targetId);
+            
+            // İçeriği göster/gizle
+            targetContent.classList.toggle('hidden');
+            
+            // Ok simgesini döndür
+            const icon = element.querySelector('i');
+            if (targetContent.classList.contains('hidden')) {
+                icon.classList.remove('rotate-180');
+            } else {
+                icon.classList.add('rotate-180');
+            }
+        }
+    });
+</script>
+{% endblock %} 

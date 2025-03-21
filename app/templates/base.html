@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GeoTagApp - Fotoğraflarınıza Konum Bilgisi Ekleyin{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: '#4da6ff',
+                            DEFAULT: '#0d6efd',
+                            dark: '#0a58ca',
+                        },
+                        secondary: {
+                            light: '#f8f9fa',
+                            DEFAULT: '#6c757d',
+                            dark: '#343a40',
+                        },
+                        success: {
+                            light: '#d1e7dd',
+                            DEFAULT: '#198754',
+                            dark: '#157347',
+                        },
+                        warning: {
+                            light: '#fff3cd',
+                            DEFAULT: '#ffc107',
+                            dark: '#e67700',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .btn {
+                @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center justify-center gap-2;
+            }
+            .btn-primary {
+                @apply bg-primary text-white hover:bg-primary-dark;
+            }
+            .btn-secondary {
+                @apply bg-secondary text-white hover:bg-secondary-dark;
+            }
+            .btn-success {
+                @apply bg-success text-white hover:bg-success-dark;
+            }
+            .btn-warning {
+                @apply bg-warning text-white hover:bg-warning-dark;
+            }
+            .btn-outline {
+                @apply border border-gray-300 hover:bg-gray-100;
+            }
+            .card {
+                @apply bg-white rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg;
+            }
+            .card-header {
+                @apply px-6 py-4 border-b border-gray-200;
+            }
+            .card-body {
+                @apply p-6;
+            }
+            .form-control {
+                @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+            }
+            .form-label {
+                @apply block text-gray-700 text-sm font-medium mb-1;
+            }
+            .form-text {
+                @apply text-sm text-gray-500 mt-1;
+            }
+            .alert {
+                @apply p-4 rounded-lg mb-4;
+            }
+            .alert-info {
+                @apply bg-blue-100 text-blue-800;
+            }
+            .alert-warning {
+                @apply bg-yellow-100 text-yellow-800;
+            }
+            .alert-success {
+                @apply bg-green-100 text-green-800;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <nav class="bg-gray-800 text-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="{{ url_for('index') }}" class="text-xl font-bold flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt text-primary-light"></i> GeoTagApp
+                </a>
+                <div class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="{{ url_for('index') }}" class="hover:text-primary-light transition-colors">Ana Sayfa</a></li>
+                        <li><a href="{{ url_for('faq') }}" class="hover:text-primary-light transition-colors">SSS</a></li>
+                        <li><a href="{{ url_for('contact') }}" class="hover:text-primary-light transition-colors">İletişim</a></li>
+                        <li><a href="{{ url_for('impressum') }}" class="hover:text-primary-light transition-colors">Künye</a></li>
+                    </ul>
+                </div>
+                <button class="md:hidden text-white focus:outline-none" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <!-- Mobil Menü -->
+            <div class="md:hidden hidden" id="mobileMenu">
+                <ul class="pb-4 space-y-2">
+                    <li><a href="{{ url_for('index') }}" class="block py-2 hover:text-primary-light transition-colors">Ana Sayfa</a></li>
+                    <li><a href="{{ url_for('faq') }}" class="block py-2 hover:text-primary-light transition-colors">SSS</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="block py-2 hover:text-primary-light transition-colors">İletişim</a></li>
+                    <li><a href="{{ url_for('impressum') }}" class="block py-2 hover:text-primary-light transition-colors">Künye</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 flex-grow">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info flex justify-between mb-6" role="alert">
+                        <span>{{ message }}</span>
+                        <button type="button" class="text-gray-500 hover:text-gray-800" onclick="this.parentElement.style.display='none'">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="bg-gray-100 py-6 border-t border-gray-200 mt-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row md:justify-between items-center">
+                <p class="text-gray-600 mb-4 md:mb-0">&copy; 2023 GeoTagApp. Tüm hakları saklıdır.</p>
+                <div class="flex gap-4">
+                    <a href="{{ url_for('impressum') }}" class="text-gray-600 hover:text-primary transition-colors">Künye</a>
+                    <span class="text-gray-400">|</span>
+                    <a href="{{ url_for('contact') }}" class="text-gray-600 hover:text-primary transition-colors">İletişim</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        // Mobil menü toggle
+        document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

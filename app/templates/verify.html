@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Doğrulama - GeoTagApp{% endblock %}
+
+{% block head %}
+<style>
+    .iframe-container {
+        position: relative;
+        width: 100%;
+        height: 75vh;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    
+    .iframe-container iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+    
+    .countdown-animation {
+        animation: fadeOutSlide 1s forwards;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    @keyframes fadeOutSlide {
+        0% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(20px); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="card">
+        <div class="card-header bg-warning text-white">
+            <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-shield-alt"></i> Google Maps Pinleme Yazılımı İncelemesi Gerekli</h1>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-8">
+                <div class="flex justify-center mb-6">
+                    <span class="inline-flex items-center justify-center p-4 bg-warning-light rounded-full text-warning-dark">
+                        <i class="fas fa-map-marked-alt text-4xl"></i>
+                    </span>
+                </div>
+                
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Google Maps Sıralamanızı Yükseltmek İçin</h2>
+                
+                <div class="alert alert-info max-w-2xl mx-auto">
+                    <p class="font-medium">Görselinizi indirmeden önce <strong>botmarketi.com.tr</strong>'deki Google Maps Pinleme yazılımını incelemeniz gerekiyor.</p>
+                    <p class="mt-2">Aşağıdaki site en az <span id="timer" class="font-bold text-primary">10</span> saniye boyunca görüntülenmelidir.</p>
+                </div>
+            </div>
+            
+            <!-- iframe container ile çevrili iframe -->
+            <div class="iframe-container border-2 border-warning mb-6 shadow-lg">
+                <button id="fullscreenBtn" class="absolute top-3 right-3 z-10 bg-black bg-opacity-60 text-white px-3 py-2 rounded-md shadow-sm flex items-center space-x-2 hover:bg-opacity-80 transition-all">
+                    <i class="fas fa-expand"></i>
+                    <span class="text-sm">Tam Ekran</span>
+                </button>
+                <iframe id="botmarketiFrame" src="https://botmarketi.com.tr" title="botmarketi.com.tr - Google Maps Pinleme Yazılımı" allowfullscreen></iframe>
+            </div>
+            
+            <div class="text-center mb-8">
+                <a href="https://botmarketi.com.tr" target="_blank" class="inline-flex items-center px-4 py-2 bg-warning text-white rounded-md hover:bg-warning-dark transition-colors">
+                    <i class="fas fa-external-link-alt mr-2"></i> Yeni Sekmede Aç
+                </a>
+                <p class="text-sm text-gray-600 mt-2">Daha iyi bir inceleme deneyimi için yeni sekmede açabilirsiniz</p>
+            </div>
+            
+            <div id="countdownContainer" class="fixed bottom-6 right-6 bg-gray-900 bg-opacity-80 text-white px-5 py-3 rounded-full shadow-lg z-50 flex items-center space-x-3">
+                <i class="fas fa-hourglass-half animate-pulse"></i>
+                <div>Kalan süre: <span id="countdown" class="font-bold text-warning">10</span> saniye</div>
+            </div>
+            
+            <div class="text-center mt-10">
+                <div class="bg-gray-100 rounded-lg p-4 mb-6 max-w-2xl mx-auto">
+                    <p class="font-medium text-gray-800 mb-2">Google Maps işletmenizi üst sıralara taşımak için profesyonel çözüm</p>
+                    <p class="text-sm text-gray-600">Görselinize coğrafi etiket eklemek iyi bir başlangıç, ancak botmarketi.com.tr'nin sunduğu Google Maps Pinleme yazılımı size çok daha fazlasını sunabilir!</p>
+                </div>
+                
+                <a href="{{ url_for('download_file', filename=filename) }}" id="downloadBtn" class="btn btn-primary btn-lg disabled">
+                    <i class="fas fa-download"></i> Görseli İndir
+                </a>
+                <p id="downloadHint" class="text-sm text-gray-500 mt-2">
+                    Lütfen <span id="downloadTimer" class="font-medium">10</span> saniye bekleyin...
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let secondsLeft = 10;
+        const downloadBtn = document.getElementById('downloadBtn');
+        const countdown = document.getElementById('countdown');
+        const timer = document.getElementById('timer');
+        const countdownContainer = document.getElementById('countdownContainer');
+        const downloadHint = document.getElementById('downloadHint');
+        const downloadTimer = document.getElementById('downloadTimer');
+        
+        // Sayfa açıldığında sayaç başlat
+        const interval = setInterval(function() {
+            secondsLeft--;
+            countdown.textContent = secondsLeft;
+            timer.textContent = secondsLeft;
+            downloadTimer.textContent = secondsLeft;
+            
+            if (secondsLeft <= 0) {
+                clearInterval(interval);
+                downloadBtn.classList.remove('disabled');
+                downloadBtn.classList.add('hover:shadow-lg', 'transition-all');
+                countdown.textContent = "0";
+                timer.textContent = "0";
+                
+                // Sayaç containerını gizle
+                countdownContainer.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <div>İndirmeye hazır!</div>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    countdownContainer.classList.add('countdown-animation');
+                    setTimeout(() => {
+                        countdownContainer.style.display = "none";
+                    }, 1000);
+                }, 3000);
+                
+                // Download hint yazısını değiştir
+                downloadHint.innerHTML = '<span class="text-green-600">İndirmeye hazır!</span> Lütfen görseli indirmek için butona tıklayın.';
+                
+                // Sayfa başlığını değiştir
+                document.title = "İndirmeye Hazır - GeoTagApp";
+                
+                // Bildirim göster
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'mb-6 bg-green-100 text-green-800 rounded-lg px-4 py-3 flex justify-between items-center';
+                alertDiv.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        <span><strong>İndirmeye hazır!</strong> Görselinizi indirebilirsiniz.</span>
+                    </div>
+                    <button class="text-green-600 hover:text-green-800" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                const cardBody = document.querySelector('.card-body');
+                cardBody.insertBefore(alertDiv, cardBody.firstChild);
+            }
+        }, 1000);
+        
+        // Tam ekran butonu işlevselliği
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const iframe = document.getElementById('botmarketiFrame');
+        
+        fullscreenBtn.addEventListener('click', function() {
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Safari */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE11 */
+                iframe.msRequestFullscreen();
+            }
+        });
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+
+{% block title %}GeoTagApp - Fotoğraflarınıza Konum Bilgisi Ekleyin{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt"></i> Google Maps İçin Fotoğraf Geotaglama</h1>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800">Fotoğraflarınıza konum bilgisi ekleyerek Google Maps sıralamanızı yükseltin!</h2>
+                
+                <div class="alert alert-info mb-8">
+                    <p class="font-medium"><strong>Google Maps İşletmenizi Öne Çıkarın!</strong> İşletme Profilinize yükleyeceğiniz coğrafi etiketli görseller, Google sıralamanızı iyileştirebilir.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-md border border-gray-100 mb-8 overflow-hidden">
+                    <div class="bg-gray-50 px-6 py-3 border-b border-gray-100">
+                        <h3 class="font-medium text-gray-700">Fotoğrafları nasıl coğrafi etiketleyebilirsiniz:</h3>
+                    </div>
+                    <div class="px-6 py-4 text-left">
+                        <ol class="space-y-2 list-decimal list-inside text-gray-700">
+                            <li>JPG / PNG / WebP görsellerini yükleyin</li>
+                            <li>Varsa mevcut coğrafi etiketler harita üzerinde gösterilir</li>
+                            <li>İşaretçiyi ayarlayın veya enlem ve boylamı manuel olarak girin</li>
+                            <li>İsteğe bağlı olarak ek EXIF etiketleri ekleyin</li>
+                            <li>"EXIF Etiketlerini Yaz" düğmesine tıklayın</li>
+                            <li>Coğrafi etiketlenmiş görüntüyü indirin</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" class="mb-10" id="uploadForm">
+                    <div class="mb-6 max-w-lg mx-auto">
+                        <label for="file" class="form-label">Görsel seçin:</label>
+                        <div class="mt-1 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4h-12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="file" class="relative font-medium text-primary hover:text-primary-dark focus-within:outline-none">
+                                        <span>Dosya seçin</span>
+                                        <input id="file" name="file" type="file" accept=".jpg,.jpeg,.png,.webp" class="sr-only" required>
+                                    </label>
+                                    <p class="pl-1">veya sürükleyip bırakın</p>
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG veya WebP dosyaları (Maks. 16MB)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Görsel Yükle
+                    </button>
+                </form>
+                
+                <hr class="my-8 border-gray-200">
+                
+                <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl shadow-md border border-yellow-200 mb-8 overflow-hidden">
+                    <div class="bg-warning px-6 py-3 text-white">
+                        <h3 class="font-medium flex items-center"><i class="fas fa-star mr-2"></i>Google Maps Sıralamasını Yükseltmek İçin Profesyonel Çözüm</h3>
+                    </div>
+                    <div class="px-6 py-4">
+                        <p class="mb-2 text-gray-800">İşletmenizin Google Maps'te üst sıralarda çıkmasını mı istiyorsunuz?</p>
+                        <p class="mb-4 font-medium text-gray-900"><strong>botmarketi.com.tr</strong>'nin sunduğu Google Maps Pinleme Yazılımı ile işletmenizin görünürlüğünü artırın!</p>
+                        <a href="https://botmarketi.com.tr" target="_blank" class="btn btn-warning mb-2">
+                            <i class="fas fa-external-link-alt"></i> Hemen Ziyaret Et
+                        </a>
+                        <div class="text-sm text-gray-600 mt-2">Etkili dijital varlık yönetimi için profesyonel çözümler.</div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h4 class="text-lg font-medium text-gray-800 mb-2">İletişimde kalalım!</h4>
+                    <p class="text-gray-600 mb-4 max-w-xl mx-auto">Özel teklifler, teknik sorunlar, duyurulan kesintiler, haberler ve ürün güncellemeleri hakkında e-posta almak için posta listemize abone olun.</p>
+                    <div class="max-w-md mx-auto">
+                        <form id="subscribeForm" class="flex flex-col sm:flex-row gap-2">
+                            <input type="email" class="form-control" placeholder="E-posta adresiniz" aria-label="E-posta adresiniz">
+                            <button class="btn btn-primary whitespace-nowrap" type="submit">Abone Ol</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-6 py-4 border-t border-gray-100">
+            <p class="text-center text-sm text-gray-600">Bu web sitesiyle ilgili herhangi bir sorunuz varsa veya sorun yaşıyorsanız, lütfen <a href="mailto:info@botmarketi.com.tr" class="text-primary hover:underline">info@botmarketi.com.tr</a> adresinden bize bildirin.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Dosya yükleme alanı için sürükle-bırak işlevi
+    const dropArea = document.querySelector('label[for="file"]').parentElement.parentElement;
+    const fileInput = document.getElementById('file');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+        dropArea.classList.add('border-primary', 'bg-blue-50');
+        dropArea.classList.remove('border-gray-300');
+    }
+    
+    function unhighlight() {
+        dropArea.classList.remove('border-primary', 'bg-blue-50');
+        dropArea.classList.add('border-gray-300');
+    }
+    
+    dropArea.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        fileInput.files = files;
+    }
+    
+    // Dosya seçildiğinde adını göster
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const fileName = this.files[0].name;
+            const fileNameDisplay = document.createElement('p');
+            fileNameDisplay.className = 'mt-2 text-sm text-center text-primary';
+            fileNameDisplay.textContent = `Seçilen dosya: ${fileName}`;
+            
+            // Eğer daha önce bir dosya adı gösterilmişse, onu kaldır
+            const existingFileNameDisplay = dropArea.querySelector('p.text-primary');
+            if (existingFileNameDisplay) {
+                existingFileNameDisplay.remove();
+            }
+            
+            dropArea.appendChild(fileNameDisplay);
+        }
+    });
+</script>
+{% endblock %} 

@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}Konum Bilgisi Ekle - GeoTagApp{% endblock %}
+
+{% block head %}
+<style>
+    #map {
+        height: 450px;
+        width: 100%;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .leaflet-container {
+        font: inherit;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt"></i> Konum Bilgisi Ekle</h1>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Sol Kolon: Görsel ve Form -->
+                <div class="lg:col-span-5">
+                    <div class="mb-8">
+                        <h3 class="text-lg font-medium text-gray-800 mb-3">Yüklenen Görsel: <span class="text-gray-600">{{ original_filename }}</span></h3>
+                        <div class="flex justify-center bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <img src="{{ url_for('static', filename='uploads/' + filename) }}" class="max-h-64 rounded shadow-sm" alt="Yüklenen görsel">
+                        </div>
+                    </div>
+
+                    <form action="{{ url_for('write_exif') }}" method="post" id="geotagForm" class="space-y-5">
+                        <input type="hidden" name="filename" value="{{ filename }}">
+                        <input type="hidden" name="original_filename" value="{{ original_filename }}">
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="latitude" class="form-label">Enlem:</label>
+                                <input type="number" class="form-control" id="latitude" name="latitude" step="any" value="{{ exif_data.latitude if exif_data and 'latitude' in exif_data else '' }}">
+                            </div>
+                            
+                            <div>
+                                <label for="longitude" class="form-label">Boylam:</label>
+                                <input type="number" class="form-control" id="longitude" name="longitude" step="any" value="{{ exif_data.longitude if exif_data and 'longitude' in exif_data else '' }}">
+                            </div>
+                        </div>
+                        
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center cursor-pointer" 
+                                 onclick="document.getElementById('exifAccordionBody').classList.toggle('hidden')">
+                                <h3 class="text-base font-medium text-gray-700">Ek EXIF Etiketleri</h3>
+                                <i class="fas fa-chevron-down text-gray-500"></i>
+                            </div>
+                            <div id="exifAccordionBody" class="p-4 space-y-4">
+                                <div>
+                                    <label for="keywords" class="form-label">Anahtar Kelimeler (virgülle ayırın):</label>
+                                    <textarea class="form-control" id="keywords" name="keywords" rows="3" maxlength="6600"></textarea>
+                                    <div class="form-text">
+                                        Maksimum 6600 karakter. Bu kelimeler DocumentName, XPKeywords ve UserComment alanlarına kaydedilir.
+                                        <strong>Not:</strong> Bazı EXIF okuyucular sadece DocumentName alanını gösterebilir.
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label for="description" class="form-label">Açıklama:</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" maxlength="1300"></textarea>
+                                    <div class="form-text">
+                                        Maksimum 1300 karakter. Görselin içeriğini tanımlayacak bir açıklama yazın. 
+                                        Bu açıklama ImageDescription alanına kaydedilir.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- botmarketi.com.tr Reklamı -->
+                        <div class="bg-gradient-to-r from-amber-50 to-yellow-50 border-l-4 border-warning p-4 rounded-lg shadow-sm mt-6">
+                            <div class="font-medium text-warning-dark mb-2 flex items-center">
+                                <i class="fas fa-star mr-2"></i>Google Maps Sıralamanızı Yükseltmek İster misiniz?
+                            </div>
+                            <p class="text-sm text-gray-700 mb-3">Bu uygulama ile eklediğiniz basit geo etiketler, Google Maps sıralamanızda iyileşme sağlayabilir, ancak profesyonel sonuçlar için:</p>
+                            <a href="https://botmarketi.com.tr" target="_blank" class="btn btn-warning text-sm">
+                                <i class="fas fa-external-link-alt"></i> botmarketi.com.tr Ziyaret Et
+                            </a>
+                            <div class="text-xs text-gray-500 mt-2">Google Maps Pinleme yazılımı ile işletmeniz üst sıralara çıksın!</div>
+                        </div>
+                        
+                        <div class="flex gap-3 mt-6">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> EXIF Etiketlerini Yaz
+                            </button>
+                            <a href="{{ url_for('index') }}" class="btn btn-outline">
+                                <i class="fas fa-arrow-left"></i> Geri
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Sağ Kolon: Harita -->
+                <div class="lg:col-span-7">
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Haritada Konumu Belirleyin</h3>
+                    <div id="map" class="mb-5"></div>
+                    <div class="alert alert-info flex items-start gap-3">
+                        <i class="fas fa-info-circle mt-1"></i> 
+                        <span>Haritada istediğiniz konuma tıklayarak veya işaretçiyi sürükleyerek konum belirleyebilirsiniz.</span>
+                    </div>
+                    <div class="mt-5 alert alert-warning">
+                        <h5 class="font-medium mb-2 flex items-center"><i class="fas fa-exclamation-triangle mr-2"></i>Görsel Kalitesi Hakkında Önemli Not</h5>
+                        <p class="text-sm">Görseller yüksek kalitede kaydedilmektedir. Görsel boyutları korunur ve JPG görselleri için %95 kalitede sıkıştırma uygulanır. Diğer görsel formatları için orijinal kalite korunmaya çalışılır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Varsayılan konum (İstanbul)
+        var defaultLat = 41.0082;
+        var defaultLng = 28.9784;
+        
+        // Eğer EXIF verileri varsa kullan
+        {% if exif_data and 'latitude' in exif_data and 'longitude' in exif_data %}
+            defaultLat = {{ exif_data.latitude }};
+            defaultLng = {{ exif_data.longitude }};
+        {% endif %}
+        
+        // Map oluştur
+        var map = L.map('map').setView([defaultLat, defaultLng], 13);
+        
+        // Harita katmanı ekle
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        
+        // İşaretçi ekle
+        var marker = L.marker([defaultLat, defaultLng], {
+            draggable: true
+        }).addTo(map);
+        
+        // İşaretçi konum bilgilerini formdaki alanlara güncelle
+        function updateMarkerPosition(lat, lng) {
+            document.getElementById('latitude').value = lat.toFixed(6);
+            document.getElementById('longitude').value = lng.toFixed(6);
+        }
+        
+        // Başlangıçta form alanlarını doldur
+        updateMarkerPosition(defaultLat, defaultLng);
+        
+        // İşaretçi sürüklenirse
+        marker.on('dragend', function(event) {
+            var position = marker.getLatLng();
+            updateMarkerPosition(position.lat, position.lng);
+        });
+        
+        // Haritaya tıklanırsa
+        map.on('click', function(event) {
+            marker.setLatLng(event.latlng);
+            updateMarkerPosition(event.latlng.lat, event.latlng.lng);
+        });
+        
+        // Form alanlarında değişiklik olursa haritayı güncelle
+        document.getElementById('latitude').addEventListener('change', updateMapFromInput);
+        document.getElementById('longitude').addEventListener('change', updateMapFromInput);
+        
+        function updateMapFromInput() {
+            var lat = parseFloat(document.getElementById('latitude').value);
+            var lng = parseFloat(document.getElementById('longitude').value);
+            
+            if (!isNaN(lat) && !isNaN(lng)) {
+                marker.setLatLng([lat, lng]);
+                map.setView([lat, lng], 13);
+            }
+        }
+    });
+</script>
+{% endblock %} 
