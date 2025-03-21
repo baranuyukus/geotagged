@@ -178,18 +178,26 @@ def write_exif():
             
             # Anahtar kelimeler
             if keywords:
-                exif_dict["0th"][piexif.ImageIFD.DocumentName] = keywords
-                
-                # Windows uyumluluğu için XPKeywords
-                if hasattr(piexif.ImageIFD, 'XPKeywords'):
-                    try:
-                        exif_dict["0th"][piexif.ImageIFD.XPKeywords] = keywords.encode('utf-16le')
-                    except:
-                        pass
+                try:
+                    keywords_bytes = keywords.encode('utf-8')
+                    exif_dict["0th"][piexif.ImageIFD.DocumentName] = keywords_bytes
+                    
+                    # Windows uyumluluğu için XPKeywords
+                    if hasattr(piexif.ImageIFD, 'XPKeywords'):
+                        try:
+                            exif_dict["0th"][piexif.ImageIFD.XPKeywords] = keywords.encode('utf-16le')
+                        except:
+                            print("XPKeywords eklenirken hata oluştu")
+                except Exception as e:
+                    print(f"Anahtar kelimeler eklenirken hata: {e}")
             
             # Açıklama
             if description:
-                exif_dict["0th"][piexif.ImageIFD.ImageDescription] = description
+                try:
+                    description_bytes = description.encode('utf-8')
+                    exif_dict["0th"][piexif.ImageIFD.ImageDescription] = description_bytes
+                except Exception as e:
+                    print(f"Açıklama eklenirken hata: {e}")
             
             # GPS verileri
             if latitude != 0 or longitude != 0:
