@@ -179,23 +179,19 @@ def write_exif():
             # Anahtar kelimeler
             if keywords:
                 try:
-                    keywords_bytes = keywords.encode('utf-8')
-                    exif_dict["0th"][piexif.ImageIFD.DocumentName] = keywords_bytes
+                    # DocumentName için UTF-8
+                    exif_dict["0th"][piexif.ImageIFD.DocumentName] = keywords.encode('utf-8')
                     
-                    # Windows uyumluluğu için XPKeywords
+                    # Windows XPKeywords için UTF-16
                     if hasattr(piexif.ImageIFD, 'XPKeywords'):
-                        try:
-                            exif_dict["0th"][piexif.ImageIFD.XPKeywords] = keywords.encode('utf-16le')
-                        except:
-                            print("XPKeywords eklenirken hata oluştu")
+                        exif_dict["0th"][piexif.ImageIFD.XPKeywords] = keywords.encode('utf-16')
                 except Exception as e:
                     print(f"Anahtar kelimeler eklenirken hata: {e}")
             
             # Açıklama
             if description:
                 try:
-                    description_bytes = description.encode('utf-8')
-                    exif_dict["0th"][piexif.ImageIFD.ImageDescription] = description_bytes
+                    exif_dict["0th"][piexif.ImageIFD.ImageDescription] = description.encode('utf-8')
                 except Exception as e:
                     print(f"Açıklama eklenirken hata: {e}")
             
@@ -212,28 +208,21 @@ def write_exif():
                 # Derece, dakika, saniye dönüşümü
                 lat_deg = int(lat_abs)
                 lat_min = int((lat_abs - lat_deg) * 60)
-                lat_sec = int(((lat_abs - lat_deg) * 60 - lat_min) * 60)
+                lat_sec = int(((lat_abs - lat_deg) * 60 - lat_min) * 60 * 100)  # 100 ile çarparak hassasiyeti artırıyoruz
                 
                 lon_deg = int(lon_abs)
                 lon_min = int((lon_abs - lon_deg) * 60)
-                lon_sec = int(((lon_abs - lon_deg) * 60 - lon_min) * 60)
+                lon_sec = int(((lon_abs - lon_deg) * 60 - lon_min) * 60 * 100)  # 100 ile çarparak hassasiyeti artırıyoruz
                 
-                # GPS sözlüğünü güncelle (diğer GPS verilerini koru)
-                if "GPS" not in exif_dict:
-                    exif_dict["GPS"] = {}
-                
-                # Sadece konum bilgilerini güncelle
-                exif_dict["GPS"][piexif.GPSIFD.GPSVersionID] = (2, 2, 0, 0)
-                exif_dict["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat_ref
-                exif_dict["GPS"][piexif.GPSIFD.GPSLatitude] = [(lat_deg, 1), (lat_min, 1), (lat_sec, 1)]
-                exif_dict["GPS"][piexif.GPSIFD.GPSLongitudeRef] = lon_ref
-                exif_dict["GPS"][piexif.GPSIFD.GPSLongitude] = [(lon_deg, 1), (lon_min, 1), (lon_sec, 1)]
-                
-                # GPS tarih bilgisini güncelle
-                try:
-                    exif_dict["GPS"][piexif.GPSIFD.GPSDateStamp] = datetime.now().strftime("%Y:%m:%d")
-                except Exception as e:
-                    print(f"GPS tarih bilgisi eklenirken hata: {e}")
+                # GPS sözlüğünü güncelle
+                exif_dict["GPS"] = {
+                    piexif.GPSIFD.GPSVersionID: (2, 2, 0, 0),
+                    piexif.GPSIFD.GPSLatitudeRef: lat_ref.encode('utf-8'),
+                    piexif.GPSIFD.GPSLatitude: ((lat_deg, 1), (lat_min, 1), (lat_sec, 100)),  # Payda 100 yaparak hassasiyeti koruyoruz
+                    piexif.GPSIFD.GPSLongitudeRef: lon_ref.encode('utf-8'),
+                    piexif.GPSIFD.GPSLongitude: ((lon_deg, 1), (lon_min, 1), (lon_sec, 100)),  # Payda 100 yaparak hassasiyeti koruyoruz
+                    piexif.GPSIFD.GPSDateStamp: datetime.now().strftime("%Y:%m:%d").encode('utf-8')
+                }
             
             # EXIF verilerini oluştur ve görüntüye kaydet
             try:
